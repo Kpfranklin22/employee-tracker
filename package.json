@@ -4,7 +4,7 @@
   "description": "Enables viewing and management of departments, roles, and employees in company to organize and plan business accordingly",
   "main": "index.js",
   "scripts": {
-    "start": "npm start",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
