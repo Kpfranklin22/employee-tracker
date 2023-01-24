@@ -3,12 +3,9 @@
   "version": "1.0.0",
   "description": "Enables viewing and management of departments, roles, and employees in company to organize and plan business accordingly",
   "main": "index.js",
-  "devDependencies": {
-    "nodemon": "^2.0.20"
-  },
   "scripts": {
     "start": "npm start",
-    "test": "nodemon index"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
