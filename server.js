@@ -96,9 +96,23 @@ function viewAllDepartments() {
   );
 }
 
-function viewAllRoles() {}
+function viewAllRoles() {
+  connection.query(
+    "SELECT role.id AS ID, title AS Title, salary AS Salary, department_id AS Department FROM role",
+    function (err, res) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.table("Roles: \n", res);
+      }
+      menuPrompt();
+    }
+  );
+}
 
-function viewAllEmployees() {}
+function viewAllEmployees() {
+  
+}
 
 function addDepartment() {}
 
