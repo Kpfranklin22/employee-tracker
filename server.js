@@ -124,10 +124,138 @@ function viewAllEmployees() {
   );
 }
 
-function addDepartment() {}
+function addDepartment() {
+  inquirer
+    .prompt([
+      {
+        name: "dept_name",
+        type: "input",
+        message: "What is the name of the department?",
+      },
+    ])
+    .then((answers) => {
+      connection.query(
+        "INSERT INTO department SET ?",
+        {
+          department_name: answers.dept_name,
+        },
+        function (err, res) {
+          if (err) throw err;
+          console.log(`${answers.dept_name} department added to table.`);
+          menuPrompt();
+        }
+      );
+    });
+}
 
-function addRole() {}
+function addRole() {
+  connection.query("SELECT * FROM department", function (err, res) {
+    if (err) throw err;
+    let allDepartments = res.map((dept) => ({
+      name: dept.department_name,
+      value: dept.id,
+    }));
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "title",
+          message: "What is the role title?",
+        },
+        {
+          type: "input",
+          name: "salary",
+          message: "What is the salary for this role?",
+        },
+        {
+          type: "list",
+          name: "dept",
+          message: "Which department does this role operate in?",
+          choices: allDepartments,
+        },
+      ])
+      .then((answers) => {
+        connection.query(
+          "INSERT INTO role SET ?",
+          {
+            title: answers.title,
+            salary: answers.salary,
+            department_id: answers.dept,
+          },
+          function (err, res) {
+            if (err) throw err;
+            console.log(`${answers.title} role confirmed and added to database.`);
+            menuPrompt();
+          }
+        );
+      });
+  });
+}
 
-function addEmployee() {}
+function addEmployee() {
+  connection.query("SELECT * FROM role", function (err, res) {
+    if (err) throw err;
+    let allRoles = res.map((role) => ({
+      name: role.title,
+      value: role.id,
+    }));
+
+    connection.query(
+      "SELECT * FROM employee WHERE manager_id IS null",
+      function (err, res) {
+        if (err) throw err;
+        let allManagers = res.map((manager) => ({
+          name: manager.first_name + " " + manager.last_name,
+          value: manager.id,
+        }));
+
+        inquirer
+          .prompt([
+            {
+              type: "input",
+              name: "first_name",
+              message: "What is the employees first name?",
+            },
+            {
+              type: "input",
+              name: "last_name",
+              message: "What is the employee's last name?",
+            },
+            {
+              type: "list",
+              name: "role",
+              message: "What is the employee's role?",
+              choices: allRoles,
+            },
+            {
+              type: "list",
+              name: "manager",
+              message: "Who is the employee's manager?",
+              choices: allManagers,
+            },
+          ])
+          .then((answers) => {
+            connection.query(
+              "INSERT INTO employee SET ?",
+              {
+                first_name: answers.first_name,
+                last_name: answers.last_name,
+                role_id: answers.role,
+                manager_id: answers.manager,
+              },
+              function (err, res) {
+                if (err) throw err;
+                console.log(
+                  `New employee, ${answers.first_name} ${answers.last_name}, confirmed and added to database`
+                );
+
+                menuPrompt();
+              }
+            );
+          });
+      }
+    );
+  });
+}
 
 function updateEmployee() {}
