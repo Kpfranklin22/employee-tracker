@@ -258,4 +258,51 @@ function addEmployee() {
   });
 }
 
-function updateEmployee() {}
+function updateEmployee() {
+  connection.query(
+    "SELECT * FROM employee RIGHT JOIN role on employee.role_id=role.id",
+    function (err, res) {
+      if (err) throw err;
+
+      let allEmployees = res.map((emp) => ({
+        name: emp.first_name + " " + emp.last_name,
+        value: emp.id,
+      }));
+
+      connection.query("SELECT * FROM role", function (err, res) {
+        if (err) throw err;
+
+        let allRoles = res.map((role) => ({
+          name: role.title,
+          value: role.id,
+        }));
+
+        inquirer
+          .prompt([
+            {
+              type: "list",
+              name: "employee",
+              message: "Select an existing employee.",
+              choices: allEmployees,
+            },
+            {
+              type: "list",
+              name: "new_role",
+              message: "Select a new role for this employee.",
+              choices: allRoles,
+            },
+          ])
+          .then((answers) => {
+            connection.query(
+              `UPDATE employee SET role_id=${answers.new_role} WHERE employee.id=${answers.employee}`,
+              function (err, res) {
+                if (err) throw err;
+                console.log(`Employee update confirmed and added to database.`);
+                menuPrompt();
+              }
+            );
+          });
+      });
+    }
+  );
+}
