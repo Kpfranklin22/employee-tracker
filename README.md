@@ -14,6 +14,8 @@
 ## Description
   This is an application for users to be able to view and manage the departments, roles, and employees in their company so that they can organize and plan their business. It's a database!
 
+A video demonstration is linked here: https://drive.google.com/file/d/1WcxQnoaTfwhWmUjFJHcREU4AwH7kaqKR/view
+
 ## Installation 
   The following dependencies must be installed to run the application: console.table, mysql2, inquirer
 
