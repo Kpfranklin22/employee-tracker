@@ -111,7 +111,17 @@ function viewAllRoles() {
 }
 
 function viewAllEmployees() {
-  
+  connection.query(
+    'SELECT employee.id AS ID, employee.first_name AS "First Name", employee.last_name AS "Last Name", department.department_name AS Department, role.title AS "Role", role.salary AS Salary, CONCAT(manager.first_name, " ", manager.last_name) AS Manager FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee AS manager ON manager.id = employee.manager_id;',
+    function (err, res) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.table("Employees:", res);
+      }
+      menuPrompt();
+    }
+  );
 }
 
 function addDepartment() {}
